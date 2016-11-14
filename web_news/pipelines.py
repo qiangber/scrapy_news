@@ -36,7 +36,8 @@ class MongoDBPipeline(object):
 
     def process_item(self, item, spider):
         item['md5'] = self.spidermd5(item)
-        self.db[item['collection_name']].update({'md5': item['md5']}, {'$set': dict(item)}, True, True)
+        item['date'] = item['date'][:10]
+        self.db['news'].update({'md5': item['md5']}, {'$set': dict(item)}, True, True)
 
     def spidermd5(self, item):
         return md5((item['url']).encode('utf-8')).hexdigest()

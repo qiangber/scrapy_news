@@ -3,7 +3,6 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.loader import ItemLoader
 from web_news.misc.increment_crawl_spider import IncrementCrawlSpider
 from web_news.items import SpiderItem
-import time
 
 
 class Weiyuanhui(IncrementCrawlSpider):

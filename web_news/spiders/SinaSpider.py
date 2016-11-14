@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-from scrapy.spiders import Spider
+from web_news.misc.increment_crawl_spider import IncrementCrawlSpider
 from scrapy.http import Request
 import json
 import time
@@ -8,7 +8,7 @@ from web_news.items import WeiboItem
 import re
 
 
-class SinaSpider(Spider):
+class SinaSpider(IncrementCrawlSpider):
     name = "weibo"
     website = "新浪微博"
     allowed_domains = ["weibo.cn"]
@@ -49,6 +49,8 @@ class SinaSpider(Spider):
         position = -2 if msg["cardlistInfo"]["page"] == 2 else -1
         for data in msg["cards"][position]["card_group"]:
             user_id = str(data["mblog"]["user"]["id"])
+            if data["mblog"]["user"]["verified"] is True:
+                self.filter.store_V_user(data["mblog"]["user"])
             url = "http://m.weibo.cn/page/json?containerid=100505" + user_id \
                   + "_-_WEIBO_SECOND_PROFILE_WEIBO&page=1"
             headers = {

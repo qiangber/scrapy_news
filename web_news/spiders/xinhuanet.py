@@ -1,5 +1,5 @@
 from scrapy.spiders import Rule
-from scrapy.linkextractor import LinkExtractor
+from scrapy.linkextractors import LinkExtractor
 from scrapy.loader import ItemLoader
 from web_news.misc.increment_crawl_spider import IncrementCrawlSpider
 from web_news.items import SpiderItem

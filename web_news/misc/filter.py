@@ -39,6 +39,11 @@ class Filter(object):
         flag = self.db[self.name].find({'url': url, 'collection_name': self.name}).count() > 0
         return flag
 
+    def store_V_user(self, user_info):
+        followers_count = user_info['followers_count']
+        if followers_count > 100000:
+            self.db['weibo_V_user'].update({'id': user_info['id']}, {'$set': dict(user_info)}, True, True)
+
     @classmethod
     def from_crawler(cls, crawler, name):
         mongo_db = crawler.settings.get('MONGO_DATABASE')
