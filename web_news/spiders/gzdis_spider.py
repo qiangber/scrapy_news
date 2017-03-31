@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
-from scrapy.spiders import Spider
 from scrapy.http import Request
 from web_news.items import SpiderItem
 import re
-from urllib.parse import urljoin
+from urlparse import urljoin
 from web_news.misc.filter import Filter
 from scrapy.loader import ItemLoader
 
+from web_news.misc.pureSpiderredis import PureSpiderRedis
 
-class GzdisSpider(Spider):
+
+class GzdisSpider(PureSpiderRedis):
     name = 'gzdis'
     website = '中共贵州省纪律检查委员会、贵州省监察厅'
     allowed_domains = ['gzdis.gov.cn']
@@ -81,4 +82,4 @@ class GzdisSpider(Spider):
             l.add_value('url', response.url)
             l.add_value('collection_name', self.name)
             l.add_value('website', self.website)
-            return l.load_item()
+            yield l.load_item()

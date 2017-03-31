@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
-from scrapy.spiders import Spider
 from scrapy.http import Request
 from scrapy.selector import Selector
 from web_news.items import SpiderItem
 import re
 import chardet
-from urllib.parse import urljoin
+from urlparse import urljoin
 from web_news.misc.filter import Filter
 import time
 from scrapy.loader import ItemLoader
+from web_news.misc.pureSpiderredis import PureSpiderRedis
 
 
-class XwzzbSpider(Spider):
+class XwzzbSpider(PureSpiderRedis):
     name = 'xwzzb'
     website = u'息烽县党建网'
     allowed_domains = ['xwzzb.cn']
@@ -86,4 +86,4 @@ class XwzzbSpider(Spider):
             l.add_value('url', response.url)
             l.add_value('collection_name', self.name)
             l.add_value('website', self.website)
-            return l.load_item()
+            yield l.load_item()

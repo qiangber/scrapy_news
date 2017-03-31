@@ -1,11 +1,13 @@
+# -*- coding: utf-8 -*-
+
 from scrapy.spiders import Rule
 from scrapy.linkextractors import LinkExtractor
 from scrapy.loader import ItemLoader
-from web_news.misc.increment_crawl_spider import IncrementCrawlSpider
 from web_news.items import SpiderItem
+from web_news.misc.spiderredis import SpiderRedis
 
 
-class Weiyuanhui(IncrementCrawlSpider):
+class Weiyuanhui(SpiderRedis):
     name = "weiyuanhui"
     website = "尾猿会"
     allowed_domain = "weiyuanhui.net"
@@ -36,4 +38,4 @@ class Weiyuanhui(IncrementCrawlSpider):
         loader.add_value('collection_name', self.name)
         loader.add_value('website', self.website)
 
-        return loader.load_item()
+        yield loader.load_item()

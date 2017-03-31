@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from scrapy.spiders import Spider
 from scrapy.http import Request
 from web_news.items import SpiderItem
 from web_news.misc.filter import Filter
 from scrapy.loader import ItemLoader
+from web_news.misc.pureSpiderredis import PureSpiderRedis
 
 
-class GybydjwSpider(Spider):
+class GybydjwSpider(PureSpiderRedis):
     name = 'gybydjw'
     website = '中共贵阳市白云区委党建网'
     allowed_domains = ['gybydjw.gov.cn']
@@ -70,4 +70,4 @@ class GybydjwSpider(Spider):
             l.add_value('url', response.url)
             l.add_value('collection_name', self.name)
             l.add_value('website', self.website)
-            return l.load_item()
+            yield l.load_item()

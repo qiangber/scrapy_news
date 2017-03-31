@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
-from scrapy.spiders import Spider
 from scrapy.http import FormRequest, Request
 import json
 import time
 from web_news.items import SpiderItem
 from web_news.misc.filter import Filter
 from scrapy.loader import ItemLoader
+from web_news.misc.pureSpiderredis import PureSpiderRedis
 
 
-class NewsSpider(Spider):
+class NewsSpider(PureSpiderRedis):
     name = 'news12371'
     website = u'12371共产党员网'
     allowed_domains = ['12371.cn']
@@ -66,4 +66,4 @@ class NewsSpider(Spider):
             l.add_value('url', response.url)
             l.add_value('collection_name', self.name)
             l.add_value('website', self.website)
-            return l.load_item()
+            yield l.load_item()

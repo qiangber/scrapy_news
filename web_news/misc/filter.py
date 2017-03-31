@@ -14,17 +14,29 @@ class Filter(object):
 
     def _requests_to_follow(self, response, _rules):
         if not isinstance(response, HtmlResponse) or len(_rules) == 0:
-            return
-        return (lnk for lnk in _rules[0].link_extractor.extract_links(response))
+            return []
+        if _rules[0].process_links:
+            return _rules[0].process_links((lnk for lnk in _rules[0].link_extractor.extract_links(response)))
+        else:
+            return (lnk for lnk in _rules[0].link_extractor.extract_links(response))
 
     def haveseenlink(self, link):
         if link in self.seen:
             return True
-        ret = self.db[self.name].find({'url': link, 'collection_name': self.name}).count() > 0
+        ret = self.col.find({'url': link, 'collection_name': self.name}).count() > 0
         
         if ret:
             self.seen.add(link)
 
+        return ret
+
+    def link_lastupdate(self, link, last_reply):
+        if link + last_reply in self.seen:
+            return True
+        ret = self.col.find({'url': link, 'collection_name': self.name, 'last_reply':last_reply}).count() > 0
+
+        if ret:
+            self.seen.add(link+last_reply)
         return ret
 
     def bool_fllow(self, response, _rules):
@@ -36,13 +48,8 @@ class Filter(object):
         return _links
 
     def url_exist(self, url):
-        flag = self.db[self.name].find({'url': url, 'collection_name': self.name}).count() > 0
+        flag = self.col.find({'url': url, 'collection_name': self.name}).count() > 0
         return flag
-
-    def store_V_user(self, user_info):
-        followers_count = user_info['followers_count']
-        if followers_count > 100000:
-            self.db['weibo_V_user'].update({'id': user_info['id']}, {'$set': dict(user_info)}, True, True)
 
     @classmethod
     def from_crawler(cls, crawler, name):

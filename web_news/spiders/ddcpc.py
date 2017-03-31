@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
-from scrapy.spiders import CrawlSpider, Rule
+from scrapy.spiders import Rule
 from scrapy.linkextractors import LinkExtractor
 from scrapy.http import Request, HtmlResponse
 from scrapy.loader import ItemLoader
 from web_news.misc.filter import Filter
 from web_news.items import *
+from web_news.misc.spiderredis import SpiderRedis
 
 
-class Ddcpc(CrawlSpider):
+class Ddcpc(SpiderRedis):
     name = "ddcpc"
     website = "当代先锋网"
     allowed_domains = ['ddcpc.cn']

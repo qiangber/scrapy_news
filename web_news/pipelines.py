@@ -17,8 +17,9 @@ class MongoDBPipeline(object):
         self.mongo_ip = mongo_ip
         self.mongo_port = mongo_port
         self.mongo_collection = mongo_collection
-        self.client = MongoClient(self.mongo_ip, self.mongo_port)
+        self.client = MongoClient(mongo_ip, mongo_port)
         self.db = self.client[self.mongo_db]
+        self.db.authenticate(mongo_username, mongo_password)
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -37,7 +38,7 @@ class MongoDBPipeline(object):
     def process_item(self, item, spider):
         item['md5'] = self.spidermd5(item)
         item['date'] = item['date'][:10]
-        self.db['news'].update({'md5': item['md5']}, {'$set': dict(item)}, True, True)
+        self.db[item['collection_name']].update({'md5': item['md5']}, {'$set': dict(item)}, True, True)
 
     def spidermd5(self, item):
         return md5((item['url']).encode('utf-8')).hexdigest()

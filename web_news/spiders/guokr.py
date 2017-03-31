@@ -1,11 +1,13 @@
+# -*- coding:utf-8 -*-
+
 from scrapy.spiders import Rule
 from scrapy.linkextractors import LinkExtractor
 from scrapy.loader import ItemLoader
-from web_news.misc.increment_crawl_spider import IncrementCrawlSpider
 from web_news.items import SpiderItem
+from web_news.misc.spiderredis import SpiderRedis
 
 
-class Guokr(IncrementCrawlSpider):
+class Guokr(SpiderRedis):
     name = "guokr"
     website = "果壳网"
     allowed_domains = ["guokr.com"]

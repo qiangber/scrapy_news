@@ -3,9 +3,10 @@ from scrapy.spiders import Spider
 from scrapy.http import Request
 import json
 from web_news.items import SpiderItem
+from web_news.misc.pureSpiderredis import PureSpiderRedis
 
 
-class SinaSpider(Spider):
+class SinaSpider(PureSpiderRedis):
     name = "weibo_news"
     website = "新浪微博"
     allowed_domains = ["weibo.cn"]

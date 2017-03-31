@@ -1,11 +1,12 @@
+# -*- coding:utf-8 -*-
 from scrapy.spiders import Rule
 from scrapy.linkextractors import LinkExtractor
 from scrapy.loader import ItemLoader
-from ..misc.increment_crawl_spider import IncrementCrawlSpider
+from ..misc.spiderredis import SpiderRedis
 from ..items import SpiderItem
 
 
-class Chinanews(IncrementCrawlSpider):
+class Chinanews(SpiderRedis):
     name = "chinanews"
     website = "中国新闻网"
     allowed_domains = ["chinanews.com"]

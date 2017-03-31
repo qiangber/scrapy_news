@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from scrapy.spiders import CrawlSpider, Rule
+from scrapy.spiders import Rule
 from scrapy.linkextractors import LinkExtractor
 from scrapy.http import Request, HtmlResponse
 from scrapy.loader import ItemLoader
@@ -7,8 +7,10 @@ from web_news.misc.filter import Filter
 from web_news.items import *
 import time
 
+from web_news.misc.spiderredis import SpiderRedis
 
-class Gygov(CrawlSpider):
+
+class Gygov(SpiderRedis):
     name = "gygov"
     website = "中国贵阳"
     allowed_domains = ['gygov.gov.cn']

@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
-from scrapy.spiders import CrawlSpider, Rule
+from scrapy.spiders import Rule
 from scrapy.linkextractors import LinkExtractor
 from scrapy.http import Request, HtmlResponse
 from scrapy.loader import ItemLoader
 from web_news.misc.filter import Filter
 from web_news.items import *
-import time
+from web_news.misc.spiderredis import SpiderRedis
 
 
-class Gyasc(CrawlSpider):
+class Gyasc(SpiderRedis):
     name = "gyasc"
     website = "贵阳市人民政府政务服务中心"
     allowed_domains = ['gyasc.gov.cn']

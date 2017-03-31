@@ -1,15 +1,23 @@
 # -*- coding: utf-8 -*-
-from scrapy.spiders import CrawlSpider
+import json
+
+from scrapy import signals
+from scrapy.exceptions import DontCloseSpider
+from scrapy.spiders import CrawlSpider, Spider
 from scrapy.http import Request, HtmlResponse
+
+from web_news.misc.LogSpider import LogStatsDIY
 from web_news.misc.filter import Filter
 
 
-class IncrementCrawlSpider(CrawlSpider):
+class IncrementCrawlSpider(Spider):
 
     @classmethod
     def from_crawler(cls, crawler, *args, **kwargs):
         spider = super(IncrementCrawlSpider, cls).from_crawler(crawler, *args, **kwargs)
         spider.filter = Filter.from_crawler(spider.crawler, spider.name)
+        spider.crawler.signals.connect(spider.spider_idle, signal=signals.spider_idle)
+        spider.l = LogStatsDIY.from_crawler(crawler)
         return spider
 
     def _requests_to_follow(self, response):
@@ -36,3 +44,13 @@ class IncrementCrawlSpider(CrawlSpider):
                     yield rule.process_request(r)
         else:
             return
+
+    def spider_idle(self):
+        """Schedules a request if available, otherwise waits."""
+        # XXX: Handle a sentinel to close the spider.
+        # sleep somtime ?
+        self.logger.info('restart')
+        # start_requests won't be filtered
+        for req in self.start_requests():
+            self.crawler.engine.crawl(req, spider=self)
+        raise DontCloseSpider

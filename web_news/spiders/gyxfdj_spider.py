@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
-from scrapy.spiders import Spider
+from web_news.misc.pureSpiderredis import PureSpiderRedis
 from scrapy.http import FormRequest, Request
 from web_news.items import SpiderItem
 import time
 from web_news.misc.filter import Filter
-from urllib.parse import urljoin
+from urlparse import urljoin
 from scrapy.loader import ItemLoader
 
 
-class GyxfdjSpider(Spider):
+class GyxfdjSpider(PureSpiderRedis):
     name = 'gyxfdj'
     website = u'息烽县党建网'
     allowed_domains = ['gyxfdj.gov.cn']
@@ -77,4 +77,4 @@ class GyxfdjSpider(Spider):
             l.add_value('url', response.url)
             l.add_value('collection_name', self.name)
             l.add_value('website', self.website)
-            return l.load_item()
+            yield l.load_item()

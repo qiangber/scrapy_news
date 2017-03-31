@@ -1,5 +1,5 @@
+# -*- coding: utf-8 -*-
 # import os
-from scrapy.spiders import Spider
 from scrapy.http import FormRequest
 from scrapy.selector import Selector
 import json
@@ -8,12 +8,13 @@ from web_news.items import *
 from math import ceil
 import requests
 import time
+from web_news.misc.pureSpiderredis import PureSpiderRedis
 
 # if not os.path.exists('images'):
 #     os.mkdir("images")
 
 
-class ZhihuTopicSpider(Spider):
+class ZhihuTopicSpider(PureSpiderRedis):
     name = 'zhihu'
     website = u'知乎'
     allowed_domains = ['zhihu.com']

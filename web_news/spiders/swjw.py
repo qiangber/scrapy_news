@@ -2,11 +2,11 @@
 from scrapy.spiders import Rule
 from scrapy.linkextractors import LinkExtractor
 from scrapy.loader import ItemLoader
-from web_news.misc.increment_crawl_spider import IncrementCrawlSpider
 from web_news.items import *
+from web_news.misc.spiderredis import SpiderRedis
 
 
-class Swjw(IncrementCrawlSpider):
+class Swjw(SpiderRedis):
     name = "swjw"
     website = "贵阳市卫生和计划委员会"
     allowed_domains = ['swjw.gygov.gov.cn']
@@ -33,7 +33,7 @@ class Swjw(IncrementCrawlSpider):
             loader.add_value('collection_name', self.name)
             loader.add_value('website', self.website)
 
-            return loader.load_item()
+            yield loader.load_item()
         except Exception as e:
             self.logger.error('error url: %s error msg: %s' % (response.url, e))
             l = ItemLoader(item=SpiderItem(), response=response)
@@ -44,4 +44,4 @@ class Swjw(IncrementCrawlSpider):
             l.add_value('url', response.url)
             l.add_value('collection_name', self.name)
             l.add_value('website', self.website)
-            return l.load_item()
+            yield l.load_item()

@@ -1,12 +1,14 @@
-from scrapy.spiders import Spider
+# -*- coding: utf-8 -*-
+
 from scrapy.http import Request
 from scrapy.loader import ItemLoader
 import time
 import json
 from web_news.items import *
+from web_news.misc.pureSpiderredis import PureSpiderRedis
 
 
-class Toutiao(Spider):
+class Toutiao(PureSpiderRedis):
     name = "toutiao"
     website = "今日头条"
     allowed_domains = ['toutiao.com']

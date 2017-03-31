@@ -15,7 +15,7 @@ SPIDER_MODULES = ['web_news.spiders']
 NEWSPIDER_MODULE = 'web_news.spiders'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
+USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36"
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -26,7 +26,7 @@ CONCURRENT_REQUESTS = 32
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 2
+DOWNLOAD_DELAY = 0.5
 # The download delay setting will honor only one of:
 CONCURRENT_REQUESTS_PER_DOMAIN = 32
 CONCURRENT_REQUESTS_PER_IP = 32
@@ -52,6 +52,9 @@ TELNETCONSOLE_PORT = [6023, 6073]
 #SPIDER_MIDDLEWARES = {
 #    'spider.middlewares.MyCustomSpiderMiddleware': 543,
 #}
+SPIDER_MIDDLEWARES = {
+    'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+}
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
@@ -61,6 +64,11 @@ TELNETCONSOLE_PORT = [6023, 6073]
 # DOWNLOADER_MIDDLEWARES = {
 #     'web_news.middlewares.RandomUserAgentMiddleware': 200,
 # }
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy_splash.SplashCookiesMiddleware': 723,
+    'scrapy_splash.SplashMiddleware': 725,
+    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
+}
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
@@ -78,7 +86,7 @@ DEPTH_PRIORITY = 1
 SCHEDULER_DISK_QUEUE = 'scrapy.squeues.PickleFifoDiskQueue'
 SCHEDULER_MEMORY_QUEUE = 'scrapy.squeues.FifoMemoryQueue'
 
-LOG_FILE = 'scrapy.log'
+# LOG_FILE = 'scrapy.log'
 
 LOG_LEVEL = 'INFO'
 
@@ -105,9 +113,24 @@ LOG_LEVEL = 'INFO'
 
 MONGO_DATABASE = 'web_news'
 MONGO_COLLECTION = 'news'
-MONGO_USER = 'admin'
+MONGO_USER = 'test'
 MONGO_PASSWORD = '123456'
 MONGO_IP = 'localhost'
 MONGO_PORT = 27017
 
 COMMANDS_MODULE = 'web_news.commands'
+
+# scrapy-redis config
+DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+SCHEDULER_PERSIST = True
+SCHEDULER_QUEUE_CLASS = "scrapy_redis.queue.SpiderQueue"
+REDIS_HOST = '127.0.0.1'
+
+# distribution for increment
+
+REDIS_COMPETE = '%(spider)s:compete'
+REDIS_WAIT = '%(spider)s:wait'
+
+SPLASH_URL = 'http://127.0.0.1:8050'
+HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'

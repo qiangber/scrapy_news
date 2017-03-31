@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from scrapy.spiders import Rule
 from scrapy.linkextractors import LinkExtractor
-from web_news.misc.increment_crawl_spider import IncrementCrawlSpider
 from scrapy.loader import ItemLoader
 from web_news.items import *
+from web_news.misc.spiderredis import SpiderRedis
 
 
-class Gysjyw(IncrementCrawlSpider):
+class Gysjyw(SpiderRedis):
     name = "gysjyw"
     website = u"贵阳教育信息网"
     allowed_domains = ['gysjyw.gov.cn']

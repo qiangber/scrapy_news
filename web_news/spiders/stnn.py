@@ -3,10 +3,10 @@ from scrapy.spiders import Rule
 from scrapy.linkextractors import LinkExtractor
 from scrapy.loader import ItemLoader
 from web_news.items import *
-from web_news.misc.increment_crawl_spider import IncrementCrawlSpider
+from web_news.misc.spiderredis import SpiderRedis
 
 
-class Stnn(IncrementCrawlSpider):
+class Stnn(SpiderRedis):
     name = "stnn"
     website = "星球环岛网"
     allowed_domains = ['stnn.cc']

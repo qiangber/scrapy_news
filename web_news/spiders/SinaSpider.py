@@ -3,12 +3,14 @@ from web_news.misc.increment_crawl_spider import IncrementCrawlSpider
 from scrapy.http import Request
 import json
 import time
-from urllib.parse import urlencode
+from urllib import urlencode
 from web_news.items import WeiboItem
 import re
 
+from web_news.misc.pureSpiderredis import PureSpiderRedis
 
-class SinaSpider(IncrementCrawlSpider):
+
+class SinaSpider(PureSpiderRedis):
     name = "weibo"
     website = "新浪微博"
     allowed_domains = ["weibo.cn"]
@@ -32,8 +34,7 @@ class SinaSpider(IncrementCrawlSpider):
     def parse(self, response):
         msg = json.loads(response.body_as_unicode())
         for data in msg["cards"][1]["card_group"]:
-            desc = data["desc"]
-            containerid = urlencode({"containerid": "100103type=&q=" + desc})
+            containerid = urlencode({"containerid": "100103type=&q=" + data["desc"]})
             # title = urlencode({"title": "精选-" + desc})
             # cardid = "weibo_page"
             url = "http://m.weibo.cn/container/getIndex?" + containerid + "&page=1"
